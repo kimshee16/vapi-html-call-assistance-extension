@@ -1,0 +1,83 @@
+<html>
+  <head>
+  </head>
+  <body>
+
+    <script>
+     
+
+    </script>
+    <script>
+      window.addEventListener('message', (event) => {
+        
+        const assistantId = event.data.assistantId;
+        const token = event.data.token;
+        // console.log("Received data from popup.html:", assistantId, " ", token);
+
+        if(assistantId !== undefined && token !== undefined) {
+
+          console.log("Assistant ID: " + assistantId + ", Token: " + token);
+
+          var vapiInstance = null;
+            const assistant = assistantId; // Substitute with your assistant ID
+            const apiKey = token; // Substitute with your Public key from Vapi Dashboard.
+            const buttonConfig = {
+              position: "bottom", // "bottom" | "top" | "left" | "right" | "top-right" | "top-left" | "bottom-left" | "bottom-right"
+              offset: "40px", // decide how far the button should be from the edge
+              width: "50px", // min-width of the button
+              height: "50px", // height of the button
+              idle: { // button state when the call is not active.
+                color: `#6200ea`, 
+                type: "round", // or "round"
+                title: "Have a quick question?", // only required in case of Pill
+                subtitle: "Talk with our AI assistant", // only required in case of pill
+                icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone.svg`,
+              },
+              loading: { // button state when the call is connecting
+                color: `rgb(93, 124, 202)`,
+                type: "round", // or "round"
+                title: "Connecting...", // only required in case of Pill
+                subtitle: "Please wait", // only required in case of pill
+                icon: `https://unpkg.com/lucide-static@0.321.0/icons/loader-2.svg`,
+              },
+              active: { // button state when the call is in progress or active.
+                color: `rgb(255, 0, 0)`,
+                type: "round", // or "round"
+                title: "Call is in progress...", // only required in case of Pill
+                subtitle: "End the call.", // only required in case of pill
+                icon: `https://unpkg.com/lucide-static@0.321.0/icons/phone-off.svg`,
+              },
+            }; // Modify this as required
+
+            (function (d, t) {
+              var g = document.createElement(t),
+                s = d.getElementsByTagName(t)[0];
+              g.src =
+                "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+              g.defer = true;
+              g.async = true;
+              s.parentNode.insertBefore(g, s);
+
+              g.onload = function () {
+                vapiInstance = window.vapiSDK.run({
+                  apiKey: apiKey, // mandatory
+                  assistant: assistant, // mandatory
+                  config: buttonConfig, // optional
+                });
+
+                vapiInstance.on('message', (message) => {
+                  console.log(message);
+                });
+              };
+            })(document, "script");
+
+        } else {
+          console.log("No data");
+        }
+        // const assistant = "5fa59b64-31c4-4d1a-b635-701b6b9e5ba7"; // Substitute with your assistant ID
+        //     const apiKey = "de3de2b8-a7bb-4db3-a910-028d4ecfadc4"; // Substitute with your Public key from Vapi Dashboard.
+      });
+    </script>
+  </body>
+</html>
+
